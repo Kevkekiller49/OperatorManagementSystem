@@ -10,7 +10,15 @@ public class OperatorManagementSystem {
   }
 
   public void createOperator(String operatorName, String location) {
-    MessageCli.OPERATOR_CREATED.printMessage(operatorName, location);
+
+    Types.Location checkLocation = Types.Location.fromString(location);
+
+    String fullName = checkLocation.getFullName();
+
+    
+
+    MessageCli.OPERATOR_CREATED.printMessage(operatorName, location, fullName);
+  
   }
 
   public void viewActivities(String operatorId) {
