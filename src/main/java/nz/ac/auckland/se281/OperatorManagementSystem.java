@@ -15,10 +15,16 @@ public class OperatorManagementSystem {
 
     String fullName = checkLocation.getFullName();
 
-    
+    String[] words = operatorName.split(" ");
+
+    for (String word : words) {
+      char operatorTransform = word.charAt(0);
+      String operatorAbbrevation = "";
+      operatorAbbrevation += operatorTransform;
+      System.out.print(operatorAbbrevation);
+    }
 
     MessageCli.OPERATOR_CREATED.printMessage(operatorName, location, fullName);
-  
   }
 
   public void viewActivities(String operatorId) {
