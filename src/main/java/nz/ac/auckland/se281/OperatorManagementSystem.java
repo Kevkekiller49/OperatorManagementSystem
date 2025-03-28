@@ -17,21 +17,22 @@ public class OperatorManagementSystem {
 
     String[] words = operatorName.split(" ");
 
+    String locationAbbrevation = checkLocation.getLocationAbbreviation();
 
     String operatorAbbrevation = "";
     for (String word : words) {
       char operatorTransform = word.charAt(0);
       operatorAbbrevation += operatorTransform;
     }
-    
+
     int number = 0;
     if (number >= 999) {
       System.out.println("Operater limit has been reached.");
     }
-      number++;
-      String numberCount = String.format("%03d", number);
-      String operatorFullName = (operatorAbbrevation + "-" + location + "-" + numberCount);
-  
+    number++;
+
+    String numberCount = String.format("%03d", number);
+    String operatorFullName = (operatorAbbrevation + "-" + locationAbbrevation + "-" + numberCount);
 
     MessageCli.OPERATOR_CREATED.printMessage(operatorName, operatorFullName, fullName);
   }
