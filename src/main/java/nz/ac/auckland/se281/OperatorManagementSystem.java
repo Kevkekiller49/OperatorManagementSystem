@@ -25,7 +25,7 @@ public class OperatorManagementSystem {
     }
     
     int number = 0;
-    if (number <= 999) {
+    if (number >= 999) {
       System.out.println("Operater limit has been reached.");
     }
       number++;
