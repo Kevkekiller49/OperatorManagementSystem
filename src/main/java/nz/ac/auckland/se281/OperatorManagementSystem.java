@@ -35,6 +35,7 @@ public class OperatorManagementSystem {
 
     Types.Location checkLocation = Types.Location.fromString(location);
     String fullName = checkLocation.getFullName();
+    String city = checkLocation.getNameEnglish();
 
     String[] words = operatorName.split(" ");
     String locationAbbrevation = checkLocation.getLocationAbbreviation();
@@ -60,11 +61,13 @@ public class OperatorManagementSystem {
       String storedName = operator.split(" \\('")[0];
       String storedLocation = operator.split(" ")[0];
 
-            if (storedName.equals(operatorName) && storedLocation.equals(storedLocation)) {
+
+      if (storedName.contains(city) && storedLocation.equals(storedLocation)) {
         MessageCli.OPERATOR_NOT_CREATED_ALREADY_EXISTS_SAME_LOCATION.printMessage(
             operatorName, fullName);
         return;
       }
+      
     }
 
     listOfOperators.add(
