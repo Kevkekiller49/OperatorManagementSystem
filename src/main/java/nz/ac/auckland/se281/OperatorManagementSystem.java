@@ -48,11 +48,24 @@ public class OperatorManagementSystem {
     int number = 0;
     if (number >= 999) {
       System.out.println("Operater limit has been reached.");
+      return;
     }
     number++;
 
     String numberCount = String.format("%03d", number);
     String operatorFullName = (operatorAbbrevation + "-" + locationAbbrevation + "-" + numberCount);
+
+    for (String operator : listOfOperators) {
+
+      String storedName = operator.split(" \\('")[0];
+      String storedLocation = operator.split(" ")[0];
+
+            if (storedName.equals(operatorName) && storedLocation.equals(storedLocation)) {
+        MessageCli.OPERATOR_NOT_CREATED_ALREADY_EXISTS_SAME_LOCATION.printMessage(
+            operatorName, fullName);
+        return;
+      }
+    }
 
     listOfOperators.add(
         operatorName + " ('" + operatorFullName + "' located in '" + fullName + "')");
