@@ -1,22 +1,42 @@
 package nz.ac.auckland.se281;
 
+import java.util.ArrayList;
+
 public class OperatorManagementSystem {
+
+  ArrayList<String> listOfOperators = new ArrayList<>();
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
 
   public void searchOperators(String keyword) {
-    System.out.println("There are no matching operators found.");
+    boolean found = false;
+    for (String operator : listOfOperators) {
+      if (operator.toLowerCase().contains(keyword.trim().toLowerCase())
+          || keyword.trim().contains("*"))
+        ;
+      if (!found) {
+        if (listOfOperators.size() == 1) {
+          MessageCli.OPERATORS_FOUND.printMessage("is", "1", "", ":");
+        } else if (listOfOperators.size() >= 2) {
+          MessageCli.OPERATORS_FOUND.printMessage(
+              "are", String.valueOf(listOfOperators.size()), "s", ":");
+        }
+        found = true;
+      }
+      System.out.println("* " + operator);
+    }
+    if (!found) {
+      System.out.println("There are no matching operators found.");
+    }
   }
 
   public void createOperator(String operatorName, String location) {
 
     Types.Location checkLocation = Types.Location.fromString(location);
-
     String fullName = checkLocation.getFullName();
 
     String[] words = operatorName.split(" ");
-
     String locationAbbrevation = checkLocation.getLocationAbbreviation();
 
     String operatorAbbrevation = "";
@@ -33,6 +53,9 @@ public class OperatorManagementSystem {
 
     String numberCount = String.format("%03d", number);
     String operatorFullName = (operatorAbbrevation + "-" + locationAbbrevation + "-" + numberCount);
+
+    listOfOperators.add(
+        operatorName + " ('" + operatorFullName + "' located in '" + fullName + "')");
 
     MessageCli.OPERATOR_CREATED.printMessage(operatorName, operatorFullName, fullName);
   }
