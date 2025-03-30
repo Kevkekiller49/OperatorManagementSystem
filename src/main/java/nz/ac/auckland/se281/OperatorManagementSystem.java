@@ -10,26 +10,31 @@ public class OperatorManagementSystem {
   public OperatorManagementSystem() {}
 
   public void searchOperators(String keyword) {
-    boolean found = false;
+    String trimmedKeyword = keyword.trim().toLowerCase();
+    int matchingOperatorsCount = 0;
+    
     for (String operator : listOfOperators) {
-      if (operator.toLowerCase().contains(keyword.trim().toLowerCase())
-          || keyword.trim().contains("*"))
-        ;
-      if (!found) {
-        if (listOfOperators.size() == 1) {
-          MessageCli.OPERATORS_FOUND.printMessage("is", "1", "", ":");
-        } else if (listOfOperators.size() >= 2) {
-          MessageCli.OPERATORS_FOUND.printMessage(
-              "are", String.valueOf(listOfOperators.size()), "s", ":");
+        if (operator.toLowerCase().contains(trimmedKeyword) || trimmedKeyword.contains("*")) {
+            matchingOperatorsCount++; 
         }
-        found = true;
-      }
-      System.out.println("* " + operator);
     }
-    if (!found) {
-      System.out.println("There are no matching operators found.");
+
+    if (matchingOperatorsCount > 0) {
+        if (matchingOperatorsCount == 1) {
+            MessageCli.OPERATORS_FOUND.printMessage("is", "1", "", ":");
+        } else {
+            MessageCli.OPERATORS_FOUND.printMessage("are", String.valueOf(matchingOperatorsCount), "s", ":");
+        }
+
+        for (String operator : listOfOperators) {
+            if (operator.toLowerCase().contains(trimmedKeyword) || trimmedKeyword.contains("*")) {
+                System.out.println("* " + operator);
+            }
+        }
+    } else {
+        System.out.println("There are no matching operators found.");
     }
-  }
+}
 
   public void createOperator(String operatorName, String location) {
 
