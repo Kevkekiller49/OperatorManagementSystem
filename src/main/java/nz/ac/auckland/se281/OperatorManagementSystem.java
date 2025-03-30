@@ -38,36 +38,38 @@ public class OperatorManagementSystem {
     String city = checkLocation.getNameEnglish();
 
     String[] words = operatorName.split(" ");
-    String locationAbbrevation = checkLocation.getLocationAbbreviation();
+    String locationAbbreviation = checkLocation.getLocationAbbreviation();
 
-    String operatorAbbrevation = "";
+    String operatorAbbreviation = "";
     for (String word : words) {
       char operatorTransform = word.charAt(0);
-      operatorAbbrevation += operatorTransform;
+      operatorAbbreviation += operatorTransform;
     }
 
-    int number = 0;
+    int number = 1;
+
+    for (String operator : listOfOperators) {
+      if (operator.contains("-" + locationAbbreviation + "-")) {
+        number++;
+      }
+    }
+
     if (number >= 999) {
-      System.out.println("Operater limit has been reached.");
+      System.out.println("Operator limit has been reached for " + city);
       return;
     }
-    number++;
 
     String numberCount = String.format("%03d", number);
-    String operatorFullName = (operatorAbbrevation + "-" + locationAbbrevation + "-" + numberCount);
+    String operatorFullName =
+        (operatorAbbreviation + "-" + locationAbbreviation + "-" + numberCount);
 
     for (String operator : listOfOperators) {
 
-      String storedName = operator.split(" \\('")[0];
-      String storedLocation = operator.split(" ")[0];
-
-
-      if (storedName.contains(city) && storedLocation.equals(storedLocation)) {
+      if (operator.contains(operatorName) && operator.contains("located in '" + fullName + "'")) {
         MessageCli.OPERATOR_NOT_CREATED_ALREADY_EXISTS_SAME_LOCATION.printMessage(
             operatorName, fullName);
         return;
       }
-      
     }
 
     listOfOperators.add(
