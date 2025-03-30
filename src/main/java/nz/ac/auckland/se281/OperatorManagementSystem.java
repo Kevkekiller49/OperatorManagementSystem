@@ -12,29 +12,30 @@ public class OperatorManagementSystem {
   public void searchOperators(String keyword) {
     String trimmedKeyword = keyword.trim().toLowerCase();
     int matchingOperatorsCount = 0;
-    
+
     for (String operator : listOfOperators) {
-        if (operator.toLowerCase().contains(trimmedKeyword) || trimmedKeyword.contains("*")) {
-            matchingOperatorsCount++; 
-        }
+      if (operator.toLowerCase().contains(trimmedKeyword) || trimmedKeyword.contains("*")) {
+        matchingOperatorsCount++;
+      }
     }
 
     if (matchingOperatorsCount > 0) {
-        if (matchingOperatorsCount == 1) {
-            MessageCli.OPERATORS_FOUND.printMessage("is", "1", "", ":");
-        } else {
-            MessageCli.OPERATORS_FOUND.printMessage("are", String.valueOf(matchingOperatorsCount), "s", ":");
-        }
+      if (matchingOperatorsCount == 1) {
+        MessageCli.OPERATORS_FOUND.printMessage("is", "1", "", ":");
+      } else {
+        MessageCli.OPERATORS_FOUND.printMessage(
+            "are", String.valueOf(matchingOperatorsCount), "s", ":");
+      }
 
-        for (String operator : listOfOperators) {
-            if (operator.toLowerCase().contains(trimmedKeyword) || trimmedKeyword.contains("*")) {
-                System.out.println("* " + operator);
-            }
+      for (String operator : listOfOperators) {
+        if (operator.toLowerCase().contains(trimmedKeyword) || trimmedKeyword.contains("*")) {
+          System.out.println("* " + operator);
         }
+      }
     } else {
-        System.out.println("There are no matching operators found.");
+      System.out.println("There are no matching operators found.");
     }
-}
+  }
 
   public void createOperator(String operatorName, String location) {
 
@@ -45,9 +46,19 @@ public class OperatorManagementSystem {
     String[] words = operatorName.split(" ");
     String locationAbbreviation = checkLocation.getLocationAbbreviation();
 
+    String operatorNameWithCapitalizedWords = "";
+    for (String word : words) {
+      if (!word.isEmpty()) {
+        operatorNameWithCapitalizedWords +=
+            Character.toUpperCase(word.charAt(0)) + word.substring(1) + " ";
+      }
+    }
+ 
+    operatorName = operatorNameWithCapitalizedWords.trim();
+
     String operatorAbbreviation = "";
     for (String word : words) {
-      char operatorTransform = word.charAt(0);
+      char operatorTransform = Character.toUpperCase(word.charAt(0));
       operatorAbbreviation += operatorTransform;
     }
 
