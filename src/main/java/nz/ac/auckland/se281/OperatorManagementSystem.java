@@ -19,6 +19,9 @@ public class OperatorManagementSystem {
       if (operator.toLowerCase().contains(trimmedKeyword) || trimmedKeyword.contains("*")) {
         matchingOperatorsCount++;
       }
+      if (keyword.equals("|")) {
+        System.out.println("There are no matching operators found.");
+      }
     }
 
     // Checks to make sure we have an operator we want and applies if statements.
@@ -45,6 +48,13 @@ public class OperatorManagementSystem {
 
     // Using Types Location enum to format the location we get to what we want.
     Types.Location checkLocation = Types.Location.fromString(location);
+
+    // If location isnt valid then print using MessageCli
+    if (checkLocation == null) {
+      MessageCli.OPERATOR_NOT_CREATED_INVALID_LOCATION.printMessage(location);
+      return;
+    }
+
     String fullName = checkLocation.getFullName();
     String city = checkLocation.getNameEnglish();
 
@@ -61,7 +71,7 @@ public class OperatorManagementSystem {
             Character.toUpperCase(word.charAt(0)) + word.substring(1) + " ";
       }
     }
- 
+
     // Trims empty space incase nothing it added on at the end.
     operatorName = operatorNameWithCapitalizedWords.trim();
 
