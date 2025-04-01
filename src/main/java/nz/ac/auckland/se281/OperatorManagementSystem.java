@@ -46,6 +46,11 @@ public class OperatorManagementSystem {
 
   public void createOperator(String operatorName, String location) {
 
+    if (operatorName.length() < 3) {
+      MessageCli.OPERATOR_NOT_CREATED_INVALID_OPERATOR_NAME.printMessage(operatorName);
+      return;
+    }
+
     // Using Types Location enum to format the location we get to what we want.
     Types.Location checkLocation = Types.Location.fromString(location);
 
