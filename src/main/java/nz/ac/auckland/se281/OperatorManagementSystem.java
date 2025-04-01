@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class OperatorManagementSystem {
 
-  ArrayList<String> listOfOperators = new ArrayList<>();
+  ArrayList<String> operatorArrayList = new ArrayList<>();
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
@@ -15,7 +15,7 @@ public class OperatorManagementSystem {
     int matchingOperatorsCount = 0;
 
     // Loops through each of operator in the array list and applies condition.
-    for (String operator : listOfOperators) {
+    for (String operator : operatorArrayList) {
       if (operator.toLowerCase().contains(trimmedKeyword) || trimmedKeyword.contains("*")) {
         matchingOperatorsCount++;
       }
@@ -34,7 +34,7 @@ public class OperatorManagementSystem {
       }
 
       // Prints operator we want with * at the front.
-      for (String operator : listOfOperators) {
+      for (String operator : operatorArrayList) {
         if (operator.toLowerCase().contains(trimmedKeyword) || trimmedKeyword.contains("*")) {
           System.out.println("* " + operator);
         }
@@ -91,7 +91,7 @@ public class OperatorManagementSystem {
     int number = 1;
     // Checks if the Arraylist has a certain locationAbbreviation in it and adds number
     // to keep track of operators.
-    for (String operator : listOfOperators) {
+    for (String operator : operatorArrayList) {
       if (operator.contains("-" + locationAbbreviation + "-")) {
         number++;
       }
@@ -110,7 +110,7 @@ public class OperatorManagementSystem {
         (operatorAbbreviation + "-" + locationAbbreviation + "-" + numberCount);
 
     // Checks if operator already exist.
-    for (String operator : listOfOperators) {
+    for (String operator : operatorArrayList) {
 
       if (operator.contains(operatorName) && operator.contains("located in '" + fullName + "'")) {
         MessageCli.OPERATOR_NOT_CREATED_ALREADY_EXISTS_SAME_LOCATION.printMessage(
@@ -120,7 +120,7 @@ public class OperatorManagementSystem {
     }
 
     // Adds operator to array list.
-    listOfOperators.add(
+    operatorArrayList.add(
         operatorName + " ('" + operatorFullName + "' located in '" + fullName + "')");
 
     // Prints message we want using MessageCli.
