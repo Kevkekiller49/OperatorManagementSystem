@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class OperatorManagementSystem {
 
   ArrayList<String> operatorArrayList = new ArrayList<>();
+  ArrayList<String> activitiesArrayList = new ArrayList<>();
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
@@ -127,12 +128,27 @@ public class OperatorManagementSystem {
     MessageCli.OPERATOR_CREATED.printMessage(operatorName, operatorFullName, fullName);
   }
 
+  int matchingActivities = 0;
+
   public void viewActivities(String operatorId) {
-    // TODO implement
+    for (String index : activitiesArrayList) {
+      if (index.equals(operatorId)) {  
+        matchingActivities++;
+        if (matchingActivities == 0) {
+          MessageCli.ACTIVITIES_FOUND.printMessage("is", "1", "y", ":");
+          return;
+        } else {
+          MessageCli.ACTIVITIES_FOUND.printMessage("are", String.valueOf(matchingActivities), "ies", ":");
+          return;
+        }
+      }
+    }
+    MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
+    return;
   }
 
   public void createActivity(String activityName, String activityType, String operatorId) {
-    // TODO implement
+    
   }
 
   public void searchActivities(String keyword) {
