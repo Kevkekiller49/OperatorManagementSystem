@@ -1,6 +1,7 @@
 package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
+import nz.ac.auckland.se281.Types.ActivityType;
 
 public class OperatorManagementSystem {
 
@@ -165,7 +166,49 @@ public class OperatorManagementSystem {
     }
   }
 
-  public void createActivity(String activityName, String activityType, String operatorId) {}
+  public void createActivity(String activityName, String activityType, String operatorId) {
+
+    if (activityName.length() < 3) {
+      MessageCli.ACTIVITY_NOT_CREATED_INVALID_ACTIVITY_NAME.printMessage(activityName);
+      return;
+    }
+
+    ActivityType newType = ActivityType.fromString(activityType);
+
+    boolean checkOperator = false;
+    String operatorName = "";
+    for (String operator : operatorArrayList) {
+      if (operator.contains("'" + operatorId + "'")) {
+        checkOperator = true;
+        operatorName = operator.split(" \\(")[0];
+        break;
+      }
+    }
+
+    if (!checkOperator) {
+      MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(operatorId);
+      return;
+    }
+
+    int activityCount = 1;
+    for (String activity : activitiesArrayList) {
+      if (activity.contains(operatorId)) {
+        activityCount++;
+      }
+    }
+
+    if (activityCount > 999) {
+      System.out.println("Activity limit has been reached for " + operatorId);
+      return;
+    }
+    String activityID = String.format("%03d", activityCount);
+    String combinedID = operatorId + "-" + activityID;
+    String storedActivity =
+        activityName + " ('" + combinedID + "': '" + newType + "') for '" + operatorName + "'";
+    activitiesArrayList.add(storedActivity);
+
+    MessageCli.ACTIVITY_CREATED.printMessage(activityName, combinedID, newType.getName(), operatorName);
+  }
 
   public void searchActivities(String keyword) {
     // TODO implement
