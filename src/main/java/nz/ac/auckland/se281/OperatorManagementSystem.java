@@ -128,28 +128,44 @@ public class OperatorManagementSystem {
     MessageCli.OPERATOR_CREATED.printMessage(operatorName, operatorFullName, fullName);
   }
 
-  int matchingActivities = 0;
-
+  //  assertContains("There are no matching activities found.");
   public void viewActivities(String operatorId) {
-    for (String index : activitiesArrayList) {
-      if (index.equals(operatorId)) {  
-        matchingActivities++;
-        if (matchingActivities == 0) {
-          MessageCli.ACTIVITIES_FOUND.printMessage("is", "1", "y", ":");
-          return;
-        } else {
-          MessageCli.ACTIVITIES_FOUND.printMessage("are", String.valueOf(matchingActivities), "ies", ":");
-          return;
-        }
+    int matchingActivities = 0;
+
+    boolean checkOperator = false;
+    for (String operator : operatorArrayList) {
+      if (operator.contains("'" + operatorId + "'")) {
+        checkOperator = true;
+        break;
       }
     }
-    MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
-    return;
+
+    if (!checkOperator) {
+      MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
+      return;
+    }
+
+    for (String activity : activitiesArrayList) {
+      if (activity.equals(operatorId)) {
+        matchingActivities++;
+      }
+    }
+
+    if (matchingActivities == 0) {
+      MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
+      return;
+    }
+    if (matchingActivities == 1) {
+      MessageCli.ACTIVITIES_FOUND.printMessage("is", "1", "y", ":");
+      return;
+    } else {
+      MessageCli.ACTIVITIES_FOUND.printMessage(
+          "are", String.valueOf(matchingActivities), "ies", ":");
+      return;
+    }
   }
 
-  public void createActivity(String activityName, String activityType, String operatorId) {
-    
-  }
+  public void createActivity(String activityName, String activityType, String operatorId) {}
 
   public void searchActivities(String keyword) {
     // TODO implement
