@@ -221,24 +221,45 @@ public class OperatorManagementSystem {
   }
 
   public void searchActivities(String keyword) {
+
     int searchCount = 0;
 
-    for (String activity : activitiesArrayList) {
-      if (activity.contains(keyword.trim()));
-      searchCount++;
+    if (activitiesArrayList.size() == 0) {
+      System.out.println("There are no matching activities found.");
+      return;
     }
 
     if (keyword.equals("*")) {
-      if (activitiesArrayList.size() == 0) {
-        System.out.println("There are no matching activities found.");
-        return;
-      } else {
-        for (String activity : activitiesArrayList) {
+      for (String activity : activitiesArrayList) {
+        if (activity.contains(keyword.trim())) {
+          searchCount++;
+        }
+      }
+    }
+    //  ACTIVITIES_FOUND("There %s %s matching activit%s found%s"),
+    // assertContains("There are 27 matching activities found:");
+    if (searchCount == 0) {
+      MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
+      return;
+    }
+    if (searchCount == 1) {
+      MessageCli.ACTIVITIES_FOUND.printMessage("is", "1", "y", ":");
+      for (String activity : activitiesArrayList) {
+        if (activity.contains(keyword.trim())) {
           System.out.println(activity);
         }
-      }  
+      }
+      return;
+    } else {
+      MessageCli.ACTIVITIES_FOUND.printMessage(
+          "are", String.valueOf(searchCount), "ies", ":");
+      for (String activity : activitiesArrayList) {
+        if (activity.contains(keyword.trim())) {
+          System.out.println(activity);
+        }
+      }
+      return;
     }
-
   }
 
   public void addPublicReview(String activityId, String[] options) {
