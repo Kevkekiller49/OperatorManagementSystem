@@ -155,23 +155,18 @@ public class OperatorManagementSystem {
       MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
       return;
     }
+
     if (matchingActivities == 1) {
       MessageCli.ACTIVITIES_FOUND.printMessage("is", "1", "y", ":");
-      for (String activity : activitiesArrayList) {
-        if (activity.contains(operatorId)) {
-          System.out.println(activity);
-        }
-      }
-      return;
     } else {
       MessageCli.ACTIVITIES_FOUND.printMessage(
           "are", String.valueOf(matchingActivities), "ies", ":");
-      for (String activity : activitiesArrayList) {
-        if (activity.contains(operatorId)) {
-          System.out.println(activity);
-        }
+    }
+
+    for (String activity : activitiesArrayList) {
+      if (activity.contains(operatorId)) {
+        System.out.println(activity);
       }
-      return;
     }
   }
 
@@ -221,43 +216,42 @@ public class OperatorManagementSystem {
   }
 
   public void searchActivities(String keyword) {
+    keyword = keyword.trim().toLowerCase();
 
-    int searchCount = 0;
-
-    if (activitiesArrayList.size() == 0) {
+    if (keyword == null || keyword.trim().isEmpty() || activitiesArrayList.size() == 0) {
       System.out.println("There are no matching activities found.");
       return;
     }
 
-      for (String activity : activitiesArrayList) {
-        if (activity.contains(keyword.trim())) {
-          searchCount++;
+    ArrayList<String> matchedList = new ArrayList<>();
+
+    for (String activity : activitiesArrayList) {
+      String lowerCaseActivity = activity.toLowerCase();
+
+      if (keyword.equals("*")) {
+        matchedList.add(activity);
+      } else {
+        if (lowerCaseActivity.contains(keyword)) {
+          matchedList.add(activity);
         }
       }
+    }
 
-    //  ACTIVITIES_FOUND("There %s %s matching activit%s found%s"),
-    // assertContains("There are 27 matching activities found:");
+    int searchCount = matchedList.size();
+
     if (searchCount == 0) {
       MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
       return;
     }
+
     if (searchCount == 1) {
       MessageCli.ACTIVITIES_FOUND.printMessage("is", "1", "y", ":");
-      for (String activity : activitiesArrayList) {
-        if (activity.contains(keyword.trim())) {
-          System.out.println(activity);
-        }
-      }
-      return;
     } else {
-      MessageCli.ACTIVITIES_FOUND.printMessage(
-          "are", String.valueOf(searchCount), "ies", ":");
-      for (String activity : activitiesArrayList) {
-        if (activity.contains(keyword.trim())) {
-          System.out.println(activity);
-        }
-      }
-      return;
+      MessageCli.ACTIVITIES_FOUND.printMessage("are", String.valueOf(searchCount), "ies", ":");
+    }
+
+    for (String activity : matchedList) {
+        System.out.println(activity);
     }
   }
 
