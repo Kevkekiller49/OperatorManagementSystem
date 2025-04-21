@@ -221,7 +221,24 @@ public class OperatorManagementSystem {
   }
 
   public void searchActivities(String keyword) {
-    // TODO implement
+    int searchCount = 0;
+
+    for (String activity : activitiesArrayList) {
+      if (activity.contains(keyword.trim()));
+      searchCount++;
+    }
+
+    if (keyword.equals("*")) {
+      if (activitiesArrayList.size() == 0) {
+        System.out.println("There are no matching activities found.");
+        return;
+      } else {
+        for (String activity : activitiesArrayList) {
+          System.out.println(activity);
+        }
+      }  
+    }
+
   }
 
   public void addPublicReview(String activityId, String[] options) {
