@@ -229,13 +229,12 @@ public class OperatorManagementSystem {
       return;
     }
 
-    if (keyword.equals("*")) {
       for (String activity : activitiesArrayList) {
         if (activity.contains(keyword.trim())) {
           searchCount++;
         }
       }
-    }
+
     //  ACTIVITIES_FOUND("There %s %s matching activit%s found%s"),
     // assertContains("There are 27 matching activities found:");
     if (searchCount == 0) {
