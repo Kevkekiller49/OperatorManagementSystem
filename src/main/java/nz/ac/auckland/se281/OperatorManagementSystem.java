@@ -129,7 +129,6 @@ public class OperatorManagementSystem {
     MessageCli.OPERATOR_CREATED.printMessage(operatorName, operatorFullName, fullName);
   }
 
-  //  assertContains("There are no matching activities found.");
   public void viewActivities(String operatorId) {
     int matchingActivities = 0;
 
@@ -147,7 +146,7 @@ public class OperatorManagementSystem {
     }
 
     for (String activity : activitiesArrayList) {
-      if (activity.equals(operatorId)) {
+      if (activity.contains(operatorId)) {
         matchingActivities++;
       }
     }
@@ -158,10 +157,20 @@ public class OperatorManagementSystem {
     }
     if (matchingActivities == 1) {
       MessageCli.ACTIVITIES_FOUND.printMessage("is", "1", "y", ":");
+      for (String activity : activitiesArrayList) {
+        if (activity.contains(operatorId)) {
+          System.out.println(activity);
+        }
+      }
       return;
     } else {
       MessageCli.ACTIVITIES_FOUND.printMessage(
           "are", String.valueOf(matchingActivities), "ies", ":");
+      for (String activity : activitiesArrayList) {
+        if (activity.contains(operatorId)) {
+          System.out.println(activity);
+        }
+      }
       return;
     }
   }
@@ -173,7 +182,7 @@ public class OperatorManagementSystem {
       return;
     }
 
-    ActivityType newType = ActivityType.fromString(activityType);
+    ActivityType newType = ActivityType.fromString(activityType.trim());
 
     boolean checkOperator = false;
     String operatorName = "";
@@ -204,10 +213,11 @@ public class OperatorManagementSystem {
     String activityID = String.format("%03d", activityCount);
     String combinedID = operatorId + "-" + activityID;
     String storedActivity =
-        activityName + " ('" + combinedID + "': '" + newType + "') for '" + operatorName + "'";
+        "* " + activityName + ": [" + combinedID + "/" + newType + "] offered by " + operatorName;
     activitiesArrayList.add(storedActivity);
 
-    MessageCli.ACTIVITY_CREATED.printMessage(activityName, combinedID, newType.getName(), operatorName);
+    MessageCli.ACTIVITY_CREATED.printMessage(
+        activityName, combinedID, newType.getName(), operatorName);
   }
 
   public void searchActivities(String keyword) {
