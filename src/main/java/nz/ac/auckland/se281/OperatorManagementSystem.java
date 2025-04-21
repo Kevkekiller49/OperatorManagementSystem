@@ -216,6 +216,7 @@ public class OperatorManagementSystem {
   }
 
   public void searchActivities(String keyword) {
+    // Transforming keyword to trim excess space and make everything lowercase
     keyword = keyword.trim().toLowerCase();
 
     if (keyword == null || keyword.trim().isEmpty() || activitiesArrayList.size() == 0) {
