@@ -5,7 +5,7 @@ import nz.ac.auckland.se281.Types.ActivityType;
 
 public class OperatorManagementSystem {
 
-  ArrayList<String> operatorArrayList = new ArrayList<>();
+  ArrayList<Operator> operatorArrayList = new ArrayList<>();
   ArrayList<String> activitiesArrayList = new ArrayList<>();
 
   // Do not change the parameters of the constructor
@@ -14,17 +14,25 @@ public class OperatorManagementSystem {
   public void searchOperators(String keyword) {
     // Removes empty space and changes keyword to all lowercase.
     String trimmedKeyword = keyword.trim().toLowerCase();
-    int matchingOperatorsCount = 0;
+
+    if (trimmedKeyword.equals("|")) {
+      System.out.println("There are no matching operators found.");
+      return;
+    }
+
+    ArrayList<Operator> matchedOperators = new ArrayList<>();
 
     // Loops through each of operator in the array list and applies condition.
-    for (String operator : operatorArrayList) {
-      if (operator.toLowerCase().contains(trimmedKeyword) || trimmedKeyword.contains("*")) {
-        matchingOperatorsCount++;
-      }
-      if (keyword.equals("|")) {
-        System.out.println("There are no matching operators found.");
+    for (Operator operator : operatorArrayList) {
+      if (trimmedKeyword.equals("*")
+      || operator.getName().toLowerCase().contains(trimmedKeyword)
+      || operator.getLocationFullName().toLowerCase().contains(trimmedKeyword)
+      || operator.getLocationAbbreviation().toLowerCase().contains(trimmedKeyword)) {
+        matchedOperators.add(operator);
       }
     }
+
+    int matchingOperatorsCount = matchedOperators.size();
 
     // Checks to make sure we have an operator we want and applies if statements.
     if (matchingOperatorsCount > 0) {
@@ -36,10 +44,8 @@ public class OperatorManagementSystem {
       }
 
       // Prints operator we want with * at the front.
-      for (String operator : operatorArrayList) {
-        if (operator.toLowerCase().contains(trimmedKeyword) || trimmedKeyword.contains("*")) {
-          System.out.println("* " + operator);
-        }
+      for (Operator operator : matchedOperators) {
+        System.out.println("* " + operator.toString());
       }
     } else {
       System.out.println("There are no matching operators found.");
@@ -93,8 +99,8 @@ public class OperatorManagementSystem {
     int number = 1;
     // Checks if the Arraylist has a certain locationAbbreviation in it and adds number
     // to keep track of operators.
-    for (String operator : operatorArrayList) {
-      if (operator.contains("-" + locationAbbreviation + "-")) {
+    for (Operator operator : operatorArrayList) {
+      if (operator.getLocationAbbreviation().equals(locationAbbreviation)) {
         number++;
       }
     }
@@ -108,13 +114,12 @@ public class OperatorManagementSystem {
     // Formats string to have 3 digits in it (00x).
     String numberCount = String.format("%03d", number);
     // Gets full name of operator that we want printed.
-    String operatorFullName =
-        (operatorAbbreviation + "-" + locationAbbreviation + "-" + numberCount);
+    String operatorId = operatorAbbreviation + "-" + locationAbbreviation + "-" + numberCount;
 
     // Checks if operator already exist.
-    for (String operator : operatorArrayList) {
-
-      if (operator.contains(operatorName) && operator.contains("located in '" + fullName + "'")) {
+    for (Operator operator : operatorArrayList) {
+      if (operator.getName().equals(operatorName)
+          && operator.getLocationFullName().equals(fullName)) {
         MessageCli.OPERATOR_NOT_CREATED_ALREADY_EXISTS_SAME_LOCATION.printMessage(
             operatorName, fullName);
         return;
@@ -122,19 +127,19 @@ public class OperatorManagementSystem {
     }
 
     // Adds operator to array list.
-    operatorArrayList.add(
-        operatorName + " ('" + operatorFullName + "' located in '" + fullName + "')");
+    operatorArrayList.add(new Operator(operatorName, operatorId, fullName, locationAbbreviation));
+    ;
 
     // Prints message we want using MessageCli.
-    MessageCli.OPERATOR_CREATED.printMessage(operatorName, operatorFullName, fullName);
+    MessageCli.OPERATOR_CREATED.printMessage(operatorName, operatorId, fullName);
   }
 
   public void viewActivities(String operatorId) {
     int matchingActivities = 0;
 
     boolean checkOperator = false;
-    for (String operator : operatorArrayList) {
-      if (operator.contains("'" + operatorId + "'")) {
+    for (Operator operator : operatorArrayList) {
+      if (operator.getId().equals(operatorId)) {
         checkOperator = true;
         break;
       }
@@ -181,10 +186,9 @@ public class OperatorManagementSystem {
 
     boolean checkOperator = false;
     String operatorName = "";
-    for (String operator : operatorArrayList) {
-      if (operator.contains("'" + operatorId + "'")) {
+    for (Operator operator : operatorArrayList) {
+      if (operator.getId().equals(operatorId)) {
         checkOperator = true;
-        operatorName = operator.split(" \\(")[0];
         break;
       }
     }
@@ -252,7 +256,7 @@ public class OperatorManagementSystem {
     }
 
     for (String activity : matchedList) {
-        System.out.println(activity);
+      System.out.println(activity);
     }
   }
 
