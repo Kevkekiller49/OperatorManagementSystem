@@ -25,9 +25,9 @@ public class OperatorManagementSystem {
     // Loops through each of operator in the array list and applies condition.
     for (Operator operator : operatorArrayList) {
       if (trimmedKeyword.equals("*")
-      || operator.getName().toLowerCase().contains(trimmedKeyword)
-      || operator.getLocationFullName().toLowerCase().contains(trimmedKeyword)
-      || operator.getLocationAbbreviation().toLowerCase().contains(trimmedKeyword)) {
+          || operator.getName().toLowerCase().contains(trimmedKeyword)
+          || operator.getLocationFullName().toLowerCase().contains(trimmedKeyword)
+          || operator.getLocationAbbreviation().toLowerCase().contains(trimmedKeyword)) {
         matchedOperators.add(operator);
       }
     }
@@ -184,19 +184,20 @@ public class OperatorManagementSystem {
 
     ActivityType newType = ActivityType.fromString(activityType.trim());
 
-    boolean checkOperator = false;
-    String operatorName = "";
+    Operator matchedOperator = null;
     for (Operator operator : operatorArrayList) {
       if (operator.getId().equals(operatorId)) {
-        checkOperator = true;
+        matchedOperator = operator;
         break;
       }
     }
 
-    if (!checkOperator) {
+    if (matchedOperator == null) {
       MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(operatorId);
       return;
     }
+
+    String operatorName = matchedOperator.getName();
 
     int activityCount = 1;
     for (String activity : activitiesArrayList) {
