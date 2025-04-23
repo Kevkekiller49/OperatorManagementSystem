@@ -29,6 +29,10 @@ public class Operator {
     return locationAbbreviation;
   }
 
+  public String getLocationEnglishName() {
+    return Types.Location.fromString(locationAbbreviation).getNameEnglish();
+  }
+
   @Override
   public String toString() {
     return name + " ('" + id + "' located in '" + locationFullName + "')";

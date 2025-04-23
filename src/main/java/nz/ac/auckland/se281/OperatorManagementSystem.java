@@ -137,6 +137,7 @@ public class OperatorManagementSystem {
   public void viewActivities(String operatorId) {
     int matchingActivities = 0;
 
+    // Initiates checkOperator as false then applies conditions 
     boolean checkOperator = false;
     for (Operator operator : operatorArrayList) {
       if (operator.getId().equals(operatorId)) {
@@ -145,22 +146,26 @@ public class OperatorManagementSystem {
       }
     }
 
+    // If checkOperator is still false print message
     if (!checkOperator) {
       MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
       return;
     }
 
+    // Loops through each element in activitesArrayList and applies condition
     for (String activity : activitiesArrayList) {
       if (activity.contains(operatorId)) {
         matchingActivities++;
       }
     }
 
+    // If 0 matchingActivites have been found then print message accordingly
     if (matchingActivities == 0) {
       MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
       return;
     }
-
+    // If 1 matchingActivites have been found then print message accordingly
+    // else print message with the value being the amount of matching activities
     if (matchingActivities == 1) {
       MessageCli.ACTIVITIES_FOUND.printMessage("is", "1", "y", ":");
     } else {
@@ -168,6 +173,7 @@ public class OperatorManagementSystem {
           "are", String.valueOf(matchingActivities), "ies", ":");
     }
 
+    // Prints each activity if it contains the operatorId
     for (String activity : activitiesArrayList) {
       if (activity.contains(operatorId)) {
         System.out.println(activity);
@@ -176,14 +182,19 @@ public class OperatorManagementSystem {
   }
 
   public void createActivity(String activityName, String activityType, String operatorId) {
-
+    // If the activity name is less than 3 letters then print erorr message
     if (activityName.length() < 3) {
       MessageCli.ACTIVITY_NOT_CREATED_INVALID_ACTIVITY_NAME.printMessage(activityName);
       return;
     }
 
+    // Convert the string activity type into activity type
     ActivityType newType = ActivityType.fromString(activityType.trim());
 
+    // Initiates matchedOperator as null 
+    // Loops through operatorArrayList and checks if the Id matches the operatorId
+    // If its a match we set matchedOperator to that operator which allows us to 
+    // Apply conditions later on
     Operator matchedOperator = null;
     for (Operator operator : operatorArrayList) {
       if (operator.getId().equals(operatorId)) {
@@ -192,13 +203,16 @@ public class OperatorManagementSystem {
       }
     }
 
+    // if, if statement didnt run then matchedOperator would be null and print an error
     if (matchedOperator == null) {
       MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(operatorId);
       return;
     }
 
+    // uses the operator class to get the name for the operator and store it
     String operatorName = matchedOperator.getName();
 
+    // Count starts at 1 then loops through activitesArrayList and applies condition
     int activityCount = 1;
     for (String activity : activitiesArrayList) {
       if (activity.contains(operatorId)) {
@@ -206,16 +220,19 @@ public class OperatorManagementSystem {
       }
     }
 
+    // If more than 999 activities made then print error
     if (activityCount > 999) {
       System.out.println("Activity limit has been reached for " + operatorId);
       return;
     }
+    // Formats all the strings to add to arraylist 
     String activityID = String.format("%03d", activityCount);
     String combinedID = operatorId + "-" + activityID;
     String storedActivity =
         "* " + activityName + ": [" + combinedID + "/" + newType + "] offered by " + operatorName;
     activitiesArrayList.add(storedActivity);
 
+    // Print message
     MessageCli.ACTIVITY_CREATED.printMessage(
         activityName, combinedID, newType.getName(), operatorName);
   }
@@ -224,38 +241,87 @@ public class OperatorManagementSystem {
     // Transforming keyword to trim excess space and make everything lowercase
     keyword = keyword.trim().toLowerCase();
 
+    // Checks to make keyword isnt empty and there are activities to search
     if (keyword == null || keyword.trim().isEmpty() || activitiesArrayList.size() == 0) {
       System.out.println("There are no matching activities found.");
       return;
     }
-
+    // Create an arraylist 
     ArrayList<String> matchedList = new ArrayList<>();
 
+    // Loops through the entire activities arraylist and apply the conditions
     for (String activity : activitiesArrayList) {
-      String lowerCaseActivity = activity.toLowerCase();
-
-      if (keyword.equals("*")) {
+      // Format the keyword and activity element
+      String lowerCaseActivity = activity.trim().toLowerCase();
+      String lowerCaseKeyword = keyword.trim().toLowerCase();
+      
+      // If the keyword is "*" then add all activities to matchedList (arrayList)
+      if (lowerCaseKeyword.equals("*")) {
         matchedList.add(activity);
-      } else {
-        if (lowerCaseActivity.contains(keyword)) {
-          matchedList.add(activity);
+        continue;
+      }
+      // Gets the start of the activity Id string from [ + 1 
+      int startOfCombinedId = activity.indexOf("[") + 1;
+      // ends the activity id at / and makes the start of it the field above
+      int endOfCombinedId = activity.indexOf("/", startOfCombinedId);
+      // extract the parts we need
+      String fullActivityId = activity.substring(startOfCombinedId, endOfCombinedId);
+      // operatorId is the beginning of fullActivityId and at the last "-"
+      String operatorId = fullActivityId.substring(0, fullActivityId.lastIndexOf("-"));
+
+      // Initialises matchedOperator as null and applies condition
+      Operator matchedOperator = null;
+      for (Operator operator : operatorArrayList) {
+        if (operator.getId().equals(operatorId)) {
+          matchedOperator = operator;
+          break;
         }
+      }
+      // Initalises matchesLocation as false
+      boolean matchesLocation = false;
+      // If matched operator is not null then apply conditions
+      if (matchedOperator != null) {
+        // Gets location name from matched operator and stores it
+        String operatorFullName = matchedOperator.getLocationFullName().toLowerCase();
+        // Gets location abbreviation from matched operator and stores it
+        String operatorAbbreviation = matchedOperator.getLocationAbbreviation().toLowerCase();
+        // Gets english location name from matched operator and stores it
+        String englishName = matchedOperator.getLocationEnglishName().toLowerCase();
+        // Gets Te Reo Maori location name from matched operator and stores it
+        String teReoName = matchedOperator.getLocationFullName().toLowerCase();
+        // Applies condition and if they return true, matchesLocation returns true
+        matchesLocation =
+            operatorFullName.contains(lowerCaseKeyword)
+                || operatorAbbreviation.contains(lowerCaseKeyword)
+                || englishName.contains(lowerCaseKeyword)
+                || teReoName.contains(lowerCaseKeyword);
+      }
+
+      // If the activity contains the keyword add the activity to the matchedList
+      // If matchesLocation is true add to array list
+      if (lowerCaseActivity.contains(lowerCaseKeyword) || matchesLocation) {
+        matchedList.add(activity);
       }
     }
 
+    // Return size of the matched List array
     int searchCount = matchedList.size();
 
+    // If searchCount is 0 print message accordingly
     if (searchCount == 0) {
       MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
       return;
     }
-
+    // If searchCount is 1 print message accordingly
+    // If searchCount is more than 1 print message accordingly using the 
+    // searchCount value as the placeholder
     if (searchCount == 1) {
       MessageCli.ACTIVITIES_FOUND.printMessage("is", "1", "y", ":");
     } else {
       MessageCli.ACTIVITIES_FOUND.printMessage("are", String.valueOf(searchCount), "ies", ":");
     }
 
+    // Print each element from matchedList
     for (String activity : matchedList) {
       System.out.println(activity);
     }
