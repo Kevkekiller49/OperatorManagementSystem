@@ -1,6 +1,11 @@
 package nz.ac.auckland.se281;
 
+import java.util.ArrayList;
+
 public class Operator {
+
+  private ArrayList<String> activityIds = new ArrayList<>();
+
   private String name;
   private String id;
   private String locationFullName;
@@ -11,6 +16,10 @@ public class Operator {
     this.id = id;
     this.locationFullName = locationFullName;
     this.locationAbbreviation = locationAbbreviation;
+  }
+
+  public boolean hasActivity(String activityId) {
+    return activityIds.contains(activityId);
   }
 
   public String getName() {

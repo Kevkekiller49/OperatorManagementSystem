@@ -7,6 +7,7 @@ public class OperatorManagementSystem {
 
   ArrayList<Operator> operatorArrayList = new ArrayList<>();
   ArrayList<String> activitiesArrayList = new ArrayList<>();
+  ArrayList<Review> reviewArrayList = new ArrayList<>();
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
@@ -329,6 +330,7 @@ public class OperatorManagementSystem {
 
   public void addPublicReview(String activityId, String[] options) {
     boolean check = false;
+    String activityName = null;
 
     for (String activity : activitiesArrayList) {
       // Gets the start of the activity Id string from [ + 1
@@ -337,11 +339,15 @@ public class OperatorManagementSystem {
       int endOfCombinedId = activity.indexOf("/", startOfCombinedId);
 
       if (startOfCombinedId > 0 && endOfCombinedId > startOfCombinedId) {
-      // extract the parts we need
-      String fullActivityId = activity.substring(startOfCombinedId, endOfCombinedId);
+        // extract the parts we need
+        String fullActivityId = activity.substring(startOfCombinedId, endOfCombinedId);
 
         if (fullActivityId.equals(activityId)) {
           check = true;
+          int indexOfColon = activity.indexOf(":");
+          if (indexOfColon > 0) {
+            activityName = activity.substring(2, indexOfColon).trim();
+          }
           break;
         }
       }
@@ -352,7 +358,17 @@ public class OperatorManagementSystem {
       return;
     }
 
+    String reviewerName = options[0];
+    boolean anonymous = Boolean.parseBoolean(options[1]);
+    int rating = Integer.parseInt(options[2]);
+    String reviewString = options[3];
+
+    PublicReview publicReview = new PublicReview(reviewerName, anonymous, rating, reviewString);
+    publicReview.setActivityId(activityId);
     
+    reviewArrayList.add(publicReview);
+
+    MessageCli.REVIEW_ADDED.printMessage(reviewerName, activityId, activityName);
 
 
   }
@@ -376,12 +392,12 @@ public class OperatorManagementSystem {
       int endOfCombinedId = activity.indexOf("/", startOfCombinedId);
 
       if (startOfCombinedId > 0 && endOfCombinedId > startOfCombinedId) {
-      // extract the parts we need
-      String fullActivityId = activity.substring(startOfCombinedId, endOfCombinedId);
+        // extract the parts we need
+        String fullActivityId = activity.substring(startOfCombinedId, endOfCombinedId);
 
         if (fullActivityId.equals(activityId)) {
           int indexOfColon = activity.indexOf(":");
-          if(indexOfColon > 0) {
+          if (indexOfColon > 0) {
             activityName = activity.substring(2, indexOfColon).trim();
           }
           break;
@@ -394,7 +410,6 @@ public class OperatorManagementSystem {
     }
 
     System.out.println("There are no reviews for activity '" + activityName + "'.");
-
   }
 
   public void endorseReview(String reviewId) {
