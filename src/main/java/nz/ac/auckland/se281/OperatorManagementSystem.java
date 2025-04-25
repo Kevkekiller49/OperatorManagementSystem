@@ -137,7 +137,7 @@ public class OperatorManagementSystem {
   public void viewActivities(String operatorId) {
     int matchingActivities = 0;
 
-    // Initiates checkOperator as false then applies conditions 
+    // Initiates checkOperator as false then applies conditions
     boolean checkOperator = false;
     for (Operator operator : operatorArrayList) {
       if (operator.getId().equals(operatorId)) {
@@ -191,9 +191,9 @@ public class OperatorManagementSystem {
     // Convert the string activity type into activity type
     ActivityType newType = ActivityType.fromString(activityType.trim());
 
-    // Initiates matchedOperator as null 
+    // Initiates matchedOperator as null
     // Loops through operatorArrayList and checks if the Id matches the operatorId
-    // If its a match we set matchedOperator to that operator which allows us to 
+    // If its a match we set matchedOperator to that operator which allows us to
     // Apply conditions later on
     Operator matchedOperator = null;
     for (Operator operator : operatorArrayList) {
@@ -225,7 +225,7 @@ public class OperatorManagementSystem {
       System.out.println("Activity limit has been reached for " + operatorId);
       return;
     }
-    // Formats all the strings to add to arraylist 
+    // Formats all the strings to add to arraylist
     String activityID = String.format("%03d", activityCount);
     String combinedID = operatorId + "-" + activityID;
     String storedActivity =
@@ -246,7 +246,7 @@ public class OperatorManagementSystem {
       System.out.println("There are no matching activities found.");
       return;
     }
-    // Create an arraylist 
+    // Create an arraylist
     ArrayList<String> matchedList = new ArrayList<>();
 
     // Loops through the entire activities arraylist and apply the conditions
@@ -254,13 +254,13 @@ public class OperatorManagementSystem {
       // Format the keyword and activity element
       String lowerCaseActivity = activity.trim().toLowerCase();
       String lowerCaseKeyword = keyword.trim().toLowerCase();
-      
+
       // If the keyword is "*" then add all activities to matchedList (arrayList)
       if (lowerCaseKeyword.equals("*")) {
         matchedList.add(activity);
         continue;
       }
-      // Gets the start of the activity Id string from [ + 1 
+      // Gets the start of the activity Id string from [ + 1
       int startOfCombinedId = activity.indexOf("[") + 1;
       // ends the activity id at / and makes the start of it the field above
       int endOfCombinedId = activity.indexOf("/", startOfCombinedId);
@@ -313,7 +313,7 @@ public class OperatorManagementSystem {
       return;
     }
     // If searchCount is 1 print message accordingly
-    // If searchCount is more than 1 print message accordingly using the 
+    // If searchCount is more than 1 print message accordingly using the
     // searchCount value as the placeholder
     if (searchCount == 1) {
       MessageCli.ACTIVITIES_FOUND.printMessage("is", "1", "y", ":");
@@ -340,7 +340,35 @@ public class OperatorManagementSystem {
   }
 
   public void displayReviews(String activityId) {
-    // TODO implement
+
+    String activityName = null;
+
+    for (String activity : activitiesArrayList) {
+      // Gets the start of the activity Id string from [ + 1
+      int startOfCombinedId = activity.indexOf("[") + 1;
+      // ends the activity id at / and makes the start of it the field above
+      int endOfCombinedId = activity.indexOf("/", startOfCombinedId);
+
+      if (startOfCombinedId > 0 && endOfCombinedId > startOfCombinedId) {
+      // extract the parts we need
+      String fullActivityId = activity.substring(startOfCombinedId, endOfCombinedId);
+
+        if (fullActivityId.equals(activityId)) {
+          int indexOfColon = activity.indexOf(":");
+          if(indexOfColon > 0) {
+            activityName = activity.substring(2, indexOfColon).trim();
+          }
+          break;
+        }
+      }
+    }
+
+    if (activityName == null) {
+      return;
+    }
+
+    System.out.println("There are no reviews for activity '" + activityName + "'.");
+
   }
 
   public void endorseReview(String reviewId) {
