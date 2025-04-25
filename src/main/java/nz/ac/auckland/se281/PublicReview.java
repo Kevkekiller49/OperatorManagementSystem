@@ -33,7 +33,7 @@ public class PublicReview extends Review {
     }
 
     String output =
-        "Reviwer: "
+        "Reviewer name: "
             + formatName
             + "\n"
             + "Rating: "

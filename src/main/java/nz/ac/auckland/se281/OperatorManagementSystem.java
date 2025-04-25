@@ -331,6 +331,7 @@ public class OperatorManagementSystem {
   public void addPublicReview(String activityId, String[] options) {
     boolean check = false;
     String activityName = null;
+    String reviewType = "public";
 
     for (String activity : activitiesArrayList) {
       // Gets the start of the activity Id string from [ + 1
@@ -368,17 +369,106 @@ public class OperatorManagementSystem {
     
     reviewArrayList.add(publicReview);
 
-    MessageCli.REVIEW_ADDED.printMessage(reviewerName, activityId, activityName);
+    MessageCli.REVIEW_ADDED.printMessage(reviewType, activityId, activityName);
 
 
   }
 
   public void addPrivateReview(String activityId, String[] options) {
-    // TODO implement
+    boolean check = false;
+    String activityName = null;
+    String reviewType = "Private";
+
+    for (String activity : activitiesArrayList) {
+      // Gets the start of the activity Id string from [ + 1
+      int startOfCombinedId = activity.indexOf("[") + 1;
+      // ends the activity id at / and makes the start of it the field above
+      int endOfCombinedId = activity.indexOf("/", startOfCombinedId);
+
+      if (startOfCombinedId > 0 && endOfCombinedId > startOfCombinedId) {
+        // extract the parts we need
+        String fullActivityId = activity.substring(startOfCombinedId, endOfCombinedId);
+
+        if (fullActivityId.equals(activityId)) {
+          check = true;
+          int indexOfColon = activity.indexOf(":");
+          if (indexOfColon > 0) {
+            activityName = activity.substring(2, indexOfColon).trim();
+          }
+          break;
+        }
+      }
+    }
+
+    if (!check) {
+      MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
+      return;
+    }
+
+    String reviewerName = options[0];
+    String reviewerEmail = options[1];
+    int rating = Integer.parseInt(options[2]);
+    String reviewString = options[3];
+    boolean followUpEmailRequested = options[4].equals("y");
+    
+
+
+    PrivateReview privateReview = new PrivateReview(reviewerName, reviewerEmail, rating, reviewString, followUpEmailRequested);
+    privateReview.setActivityId(activityId);
+    
+    reviewArrayList.add(privateReview);
+
+    MessageCli.REVIEW_ADDED.printMessage(reviewType, activityId, activityName);
+
+
+
   }
 
   public void addExpertReview(String activityId, String[] options) {
-    // TODO implement
+    boolean check = false;
+    String activityName = null;
+    String reviewType = "Expert";
+
+    for (String activity : activitiesArrayList) {
+      // Gets the start of the activity Id string from [ + 1
+      int startOfCombinedId = activity.indexOf("[") + 1;
+      // ends the activity id at / and makes the start of it the field above
+      int endOfCombinedId = activity.indexOf("/", startOfCombinedId);
+
+      if (startOfCombinedId > 0 && endOfCombinedId > startOfCombinedId) {
+        // extract the parts we need
+        String fullActivityId = activity.substring(startOfCombinedId, endOfCombinedId);
+
+        if (fullActivityId.equals(activityId)) {
+          check = true;
+          int indexOfColon = activity.indexOf(":");
+          if (indexOfColon > 0) {
+            activityName = activity.substring(2, indexOfColon).trim();
+          }
+          break;
+        }
+      }
+    }
+
+    if (!check) {
+      MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
+      return;
+    }
+
+    String reviewerName = options[0];
+    int rating = Integer.parseInt(options[1]);
+    String reviewString = options[2];
+    boolean recommend = options[3].equals("y");
+    
+
+
+    ExpertReview expertReview = new ExpertReview(reviewerName, rating, reviewString, recommend);
+    expertReview.setActivityId(activityId);
+    
+    reviewArrayList.add(expertReview);
+
+    MessageCli.REVIEW_ADDED.printMessage(reviewType, activityId, activityName);
+
   }
 
   public void displayReviews(String activityId) {
