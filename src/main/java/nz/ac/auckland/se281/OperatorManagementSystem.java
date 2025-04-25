@@ -328,7 +328,33 @@ public class OperatorManagementSystem {
   }
 
   public void addPublicReview(String activityId, String[] options) {
-    // TODO implement
+    boolean check = false;
+
+    for (String activity : activitiesArrayList) {
+      // Gets the start of the activity Id string from [ + 1
+      int startOfCombinedId = activity.indexOf("[") + 1;
+      // ends the activity id at / and makes the start of it the field above
+      int endOfCombinedId = activity.indexOf("/", startOfCombinedId);
+
+      if (startOfCombinedId > 0 && endOfCombinedId > startOfCombinedId) {
+      // extract the parts we need
+      String fullActivityId = activity.substring(startOfCombinedId, endOfCombinedId);
+
+        if (fullActivityId.equals(activityId)) {
+          check = true;
+          break;
+        }
+      }
+    }
+
+    if (!check) {
+      MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
+      return;
+    }
+
+    
+
+
   }
 
   public void addPrivateReview(String activityId, String[] options) {
