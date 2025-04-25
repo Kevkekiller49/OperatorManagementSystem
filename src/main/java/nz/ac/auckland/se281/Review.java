@@ -5,6 +5,7 @@ public abstract class Review {
   protected int rating;
   protected String reviewString;
   private String activityId;
+  private String reviewId;
 
   public Review(String reviewerName, int rating, String reviewString) {
     this.reviewerName = reviewerName;
@@ -24,8 +25,16 @@ public abstract class Review {
     this.activityId = activityId;
   }
 
+  public void setReviewId(String reviewId) {
+    this.reviewId = reviewId;
+  }
+
   public String getActivityId() {
     return activityId;
+  }
+
+  public String getReviewId() {
+    return reviewId;
   }
 
   public abstract boolean isAnonymous();

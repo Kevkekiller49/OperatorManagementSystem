@@ -359,19 +359,23 @@ public class OperatorManagementSystem {
       return;
     }
 
+    GenerateReviewId generateReviewId = new GenerateReviewId();
+
+    String reviewId = generateReviewId.generateReviewId(activityId, reviewArrayList);
+
+
+
     String reviewerName = options[0];
     boolean anonymous = Boolean.parseBoolean(options[1]);
     int rating = Integer.parseInt(options[2]);
     String reviewString = options[3];
 
     PublicReview publicReview = new PublicReview(reviewerName, anonymous, rating, reviewString);
-    publicReview.setActivityId(activityId);
-    
+    publicReview.setActivityId(reviewId);
+
     reviewArrayList.add(publicReview);
 
-    MessageCli.REVIEW_ADDED.printMessage(reviewType, activityId, activityName);
-
-
+    MessageCli.REVIEW_ADDED.printMessage(reviewType, reviewId, activityName);
   }
 
   public void addPrivateReview(String activityId, String[] options) {
@@ -405,29 +409,32 @@ public class OperatorManagementSystem {
       return;
     }
 
+    GenerateReviewId generateReviewId = new GenerateReviewId();
+
+    String reviewId = generateReviewId.generateReviewId(activityId, reviewArrayList);
+
+
     String reviewerName = options[0];
     String reviewerEmail = options[1];
     int rating = Integer.parseInt(options[2]);
     String reviewString = options[3];
     boolean followUpEmailRequested = options[4].equals("y");
-    
 
+    PrivateReview privateReview =
+        new PrivateReview(
+            reviewerName, reviewerEmail, rating, reviewString, followUpEmailRequested);
+    privateReview.setActivityId(reviewId);
 
-    PrivateReview privateReview = new PrivateReview(reviewerName, reviewerEmail, rating, reviewString, followUpEmailRequested);
-    privateReview.setActivityId(activityId);
-    
     reviewArrayList.add(privateReview);
 
-    MessageCli.REVIEW_ADDED.printMessage(reviewType, activityId, activityName);
-
-
-
+    MessageCli.REVIEW_ADDED.printMessage(reviewType, reviewId, activityName);
   }
 
   public void addExpertReview(String activityId, String[] options) {
     boolean check = false;
     String activityName = null;
     String reviewType = "Expert";
+
 
     for (String activity : activitiesArrayList) {
       // Gets the start of the activity Id string from [ + 1
@@ -455,20 +462,21 @@ public class OperatorManagementSystem {
       return;
     }
 
+    GenerateReviewId generateReviewId = new GenerateReviewId();
+
+    String reviewId = generateReviewId.generateReviewId(activityId, reviewArrayList);
+
     String reviewerName = options[0];
     int rating = Integer.parseInt(options[1]);
     String reviewString = options[2];
     boolean recommend = options[3].equals("y");
-    
-
 
     ExpertReview expertReview = new ExpertReview(reviewerName, rating, reviewString, recommend);
-    expertReview.setActivityId(activityId);
-    
+    expertReview.setActivityId(reviewId);
+
     reviewArrayList.add(expertReview);
 
-    MessageCli.REVIEW_ADDED.printMessage(reviewType, activityId, activityName);
-
+    MessageCli.REVIEW_ADDED.printMessage(reviewType, reviewId, activityName);
   }
 
   public void displayReviews(String activityId) {
