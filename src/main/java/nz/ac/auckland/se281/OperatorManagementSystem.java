@@ -552,6 +552,7 @@ public class OperatorManagementSystem {
         MessageCli.REVIEW_ENTRY_HEADER.printMessage(
             String.valueOf(privateReview.getRating()),
             "5",
+            "Private",
             privateReview.getActivityId(),
             privateReview.getName());
         System.out.println("  \"" + privateReview.getReviewString() + "\"");
@@ -566,6 +567,7 @@ public class OperatorManagementSystem {
         MessageCli.REVIEW_ENTRY_HEADER.printMessage(
             String.valueOf(expertReview.getRating()),
             "5",
+            "Expert",
             expertReview.getActivityId(),
             expertReview.getName());
 
