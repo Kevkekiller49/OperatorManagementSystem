@@ -35,19 +35,5 @@ public class PrivateReview extends Review {
     return response;
   }
 
-  @Override
-  public String toString() {
 
-    String output =
-        "Reviewer name: "
-            + this.reviewerName
-            + "\n"
-            + "Rating: "
-            + this.rating
-            + "\n"
-            + "Review: "
-            + this.reviewString;
-    
-    return output;
-  }
 }

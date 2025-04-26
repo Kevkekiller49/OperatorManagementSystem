@@ -363,8 +363,6 @@ public class OperatorManagementSystem {
 
     String reviewId = generateReviewId.generateReviewId(activityId, reviewArrayList);
 
-
-
     String reviewerName = options[0];
     boolean anonymous = Boolean.parseBoolean(options[1]);
     int rating = Integer.parseInt(options[2]);
@@ -413,7 +411,6 @@ public class OperatorManagementSystem {
 
     String reviewId = generateReviewId.generateReviewId(activityId, reviewArrayList);
 
-
     String reviewerName = options[0];
     String reviewerEmail = options[1];
     int rating = Integer.parseInt(options[2]);
@@ -434,7 +431,6 @@ public class OperatorManagementSystem {
     boolean check = false;
     String activityName = null;
     String reviewType = "Expert";
-
 
     for (String activity : activitiesArrayList) {
       // Gets the start of the activity Id string from [ + 1
@@ -507,7 +503,79 @@ public class OperatorManagementSystem {
       return;
     }
 
-    System.out.println("There are no reviews for activity '" + activityName + "'.");
+    ArrayList<Review> matchedReviews = new ArrayList<>();
+
+    for (Review review : reviewArrayList) {
+      String reviewId = review.getActivityId();
+
+      if (reviewId != null && reviewId.startsWith(activityId + "-R")) {
+        matchedReviews.add(review);
+      }
+    }
+
+    if (matchedReviews.isEmpty()) {
+      System.out.println("There are no reviews for activity '" + activityName + "'.");
+      return;
+    }
+
+    int reviewCount = matchedReviews.size();
+    // REVIEWS_FOUND("There %s %s review%s for activity '%s'."),
+    if (reviewCount == 1) {
+      MessageCli.REVIEWS_FOUND.printMessage("is", "1", "", activityName);
+    } else {
+      MessageCli.REVIEWS_FOUND.printMessage("are", String.valueOf(reviewCount), "s", activityName);
+    }
+
+    for (Review review : matchedReviews) {
+
+      if (review instanceof PublicReview) {
+        PublicReview publicReview = (PublicReview) review;
+
+        String nameToShow = publicReview.isAnonymous() ? "Anonymous" : review.getName();
+
+        // REVIEW_ENTRY_HEADER("  * [%s/%s] %s review (%s) by '%s'")
+
+        MessageCli.REVIEW_ENTRY_HEADER.printMessage(
+            String.valueOf(publicReview.getRating()),
+            "5",
+            "Public",
+            publicReview.getActivityId(),
+            nameToShow);
+        System.out.println("  \"" + publicReview.getReviewString() + "\"");
+
+        if (publicReview.isEndorsed()) {
+          System.out.println("  Endorsed by admin.");
+        }
+      } else if (review instanceof PrivateReview) {
+        PrivateReview privateReview = (PrivateReview) review;
+
+        MessageCli.REVIEW_ENTRY_HEADER.printMessage(
+            String.valueOf(privateReview.getRating()),
+            "5",
+            privateReview.getActivityId(),
+            privateReview.getName());
+        System.out.println("  \"" + privateReview.getReviewString() + "\"");
+        if (privateReview.isFollowUpEmailRequested()) {
+          MessageCli.REVIEW_ENTRY_FOLLOW_UP.printMessage(privateReview.getReviewerEmail());
+        } else {
+          System.out.println("  Resolved: \"-\"");
+        }
+      } else if (review instanceof ExpertReview) {
+        ExpertReview expertReview = (ExpertReview) review;
+
+        MessageCli.REVIEW_ENTRY_HEADER.printMessage(
+            String.valueOf(expertReview.getRating()),
+            "5",
+            expertReview.getActivityId(),
+            expertReview.getName());
+
+        System.out.println("  \"" + expertReview.getReviewString() + "\"");
+
+        if (expertReview.getRecommend()) {
+          System.out.println("  Recommended by experts.");
+        }
+      }
+    }
   }
 
   public void endorseReview(String reviewId) {

@@ -23,29 +23,5 @@ public class PublicReview extends Review {
     return this.anonymous;
   }
 
-  @Override
-  public String toString() {
-    String formatName;
-    if (!anonymous) {
-      formatName = "Anonymous";
-    } else {
-      formatName = this.reviewerName;
-    }
 
-    String output =
-        "Reviewer name: "
-            + formatName
-            + "\n"
-            + "Rating: "
-            + this.rating
-            + "\n"
-            + "Review: "
-            + this.reviewString;
-
-    if (isEndorsed()) {
-      output += "\nEndorsed: Yes";
-    }
-
-    return output;
-  }
 }

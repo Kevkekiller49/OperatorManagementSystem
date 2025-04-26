@@ -17,20 +17,6 @@ public class ExpertReview extends Review {
     return recommend;
   }
 
-  @Override
-  public String toString() {
 
-    String output =
-        "Reviewer name: "
-            + this.reviewerName
-            + "\n"
-            + "Rating: "
-            + this.rating
-            + "\n"
-            + "Review: "
-            + this.reviewString;
-    
-    return output;
-  }
   
 }

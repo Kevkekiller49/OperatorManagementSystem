@@ -50,6 +50,4 @@ public abstract class Review {
   public String getReviewString() {
     return this.reviewString;
   }
-
-  public abstract String toString();
 }
