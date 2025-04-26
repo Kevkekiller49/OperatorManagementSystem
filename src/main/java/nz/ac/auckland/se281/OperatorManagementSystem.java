@@ -581,7 +581,18 @@ public class OperatorManagementSystem {
   }
 
   public void endorseReview(String reviewId) {
-    // TODO implement
+    for (Review review : reviewArrayList) {
+      if (review.getActivityId().equals(reviewId)) {
+        if (review instanceof PublicReview) {
+          ((PublicReview) review).endorse();
+          MessageCli.REVIEW_ENDORSED.printMessage(reviewId);
+        } else {
+          MessageCli.REVIEW_NOT_ENDORSED.printMessage(reviewId);
+        }
+        return;
+      }
+    }
+    MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
   }
 
   public void resolveReview(String reviewId, String response) {
