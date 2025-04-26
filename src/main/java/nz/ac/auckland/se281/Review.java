@@ -50,4 +50,7 @@ public abstract class Review {
   public String getReviewString() {
     return this.reviewString;
   }
+
+  public void printMessage() {
+  }
 }

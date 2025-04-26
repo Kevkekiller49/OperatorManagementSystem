@@ -557,7 +557,7 @@ public class OperatorManagementSystem {
             privateReview.getName());
         System.out.println("  \"" + privateReview.getReviewString() + "\"");
         if (privateReview.isFollowUpEmailRequested()) {
-          MessageCli.REVIEW_ENTRY_FOLLOW_UP.printMessage(privateReview.getReviewerEmail());
+          review.printMessage();
         } else {
           System.out.println("  Resolved: \"-\"");
         }
@@ -596,7 +596,30 @@ public class OperatorManagementSystem {
   }
 
   public void resolveReview(String reviewId, String response) {
-    // TODO implement
+    Review reviewToResolve = null;
+
+    for (Review review : reviewArrayList) {
+      if (review.getActivityId().equals(reviewId)) {
+        reviewToResolve = review;
+        break;
+      }
+    }
+
+    if (reviewToResolve == null) {
+      MessageCli.REVIEW_NOT_FOUND.printMessage((reviewId));
+      return;
+    }
+
+    if (!(reviewToResolve instanceof PrivateReview)) {
+      MessageCli.REVIEW_NOT_RESOLVED.printMessage(reviewId);
+      return;
+    }
+    
+    PrivateReview privateReview = (PrivateReview) reviewToResolve;
+    privateReview.setResponse(response);
+  
+    MessageCli.REVIEW_RESOLVED.printMessage(reviewId);
+
   }
 
   public void uploadReviewImage(String reviewId, String imageName) {

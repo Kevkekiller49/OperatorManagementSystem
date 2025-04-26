@@ -19,6 +19,15 @@ public class PrivateReview extends Review {
     return false;
   }
 
+  @Override
+  public void printMessage() {
+    if (response != null) {
+      MessageCli.REVIEW_ENTRY_RESOLVED.printMessage(response);
+    } else if (followUpEmailRequested) {
+      MessageCli.REVIEW_ENTRY_FOLLOW_UP.printMessage(reviewerEmail);
+    } 
+  }
+
   public void setResponse(String response) {
     this.response = response;
   }
@@ -34,6 +43,5 @@ public class PrivateReview extends Review {
   public String getResponse() {
     return response;
   }
-
 
 }
