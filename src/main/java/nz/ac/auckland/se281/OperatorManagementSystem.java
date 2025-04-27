@@ -623,7 +623,33 @@ public class OperatorManagementSystem {
   }
 
   public void uploadReviewImage(String reviewId, String imageName) {
-    // TODO implement
+    String activityName = null;
+
+    for (String activity : activitiesArrayList) {
+      // Gets the start of the activity Id string from [ + 1
+      int startOfCombinedId = activity.indexOf("[") + 1;
+      // ends the activity id at / and makes the start of it the field above
+      int endOfCombinedId = activity.indexOf("/", startOfCombinedId);
+
+      if (startOfCombinedId > 0 && endOfCombinedId > startOfCombinedId) {
+        // extract the parts we need
+        String fullActivityId = activity.substring(startOfCombinedId, endOfCombinedId);
+
+        if (fullActivityId.equals(reviewId)) {
+          int indexOfColon = activity.indexOf(":");
+          if (indexOfColon > 0) {
+            activityName = activity.substring(2, indexOfColon).trim();
+          }
+          break;
+        }
+      }
+    }
+
+    if (activityName == null) {
+      MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
+      return;
+    }
+
   }
 
   public void displayTopActivities() {
