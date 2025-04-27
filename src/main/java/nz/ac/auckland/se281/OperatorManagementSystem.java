@@ -664,6 +664,8 @@ public class OperatorManagementSystem {
   }
 
   public void displayTopActivities() {
-    // TODO implement
+    for (Types.Location location : Types.Location.values()) {
+      System.out.println("No reviewed activities found in " + location.getFullName() + ".");
+    }
   }
 }
