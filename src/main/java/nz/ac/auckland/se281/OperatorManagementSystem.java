@@ -329,6 +329,7 @@ public class OperatorManagementSystem {
   }
 
   public void addPublicReview(String activityId, String[] options) {
+    // Initalise fields so we can manipulate to our benefit
     boolean check = false;
     String activityName = null;
     String reviewType = "public";
@@ -343,6 +344,7 @@ public class OperatorManagementSystem {
         // extract the parts we need
         String fullActivityId = activity.substring(startOfCombinedId, endOfCombinedId);
 
+        // checks they match then extracts the part we need
         if (fullActivityId.equals(activityId)) {
           check = true;
           int indexOfColon = activity.indexOf(":");
@@ -353,30 +355,34 @@ public class OperatorManagementSystem {
         }
       }
     }
-
+    // if check is false then print message
     if (!check) {
       MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
       return;
     }
-
+    // Create an object of type GenerateReviewId
     GenerateReviewId generateReviewId = new GenerateReviewId();
-
+    // call method from GenerateReviewId class to generate a review id
     String reviewId = generateReviewId.generateReviewId(activityId, reviewArrayList);
-
+    // Store the first element at index 0 as reviewerName
+    // and so on for the other parameters
     String reviewerName = options[0];
     boolean anonymous = Boolean.parseBoolean(options[1]);
     int rating = Integer.parseInt(options[2]);
     String reviewString = options[3];
 
+    // Create an object of type PublicReview
     PublicReview publicReview = new PublicReview(reviewerName, anonymous, rating, reviewString);
+    // Call method in Review class to set the id
     publicReview.setActivityId(reviewId);
-
+    // Add to arraylist
     reviewArrayList.add(publicReview);
-
+    // Print message
     MessageCli.REVIEW_ADDED.printMessage(reviewType, reviewId, activityName);
   }
 
   public void addPrivateReview(String activityId, String[] options) {
+    // Initalises same fields as Public review
     boolean check = false;
     String activityName = null;
     String reviewType = "Private";
@@ -390,7 +396,7 @@ public class OperatorManagementSystem {
       if (startOfCombinedId > 0 && endOfCombinedId > startOfCombinedId) {
         // extract the parts we need
         String fullActivityId = activity.substring(startOfCombinedId, endOfCombinedId);
-
+        // checks they match then extracts the part we need
         if (fullActivityId.equals(activityId)) {
           check = true;
           int indexOfColon = activity.indexOf(":");
@@ -401,33 +407,35 @@ public class OperatorManagementSystem {
         }
       }
     }
-
+    // if check is false then print message
     if (!check) {
       MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
       return;
     }
-
+    // Create an object of type GenerateReviewId
     GenerateReviewId generateReviewId = new GenerateReviewId();
-
+    // call method from GenerateReviewId class to generate a review id
     String reviewId = generateReviewId.generateReviewId(activityId, reviewArrayList);
-
+    // Store the first element at index 0 as reviewerName
+    // and so on for the other parameters
     String reviewerName = options[0];
     String reviewerEmail = options[1];
     int rating = Integer.parseInt(options[2]);
     String reviewString = options[3];
     boolean followUpEmailRequested = options[4].equals("y");
-
+    // Create privateReview of type PrivateReview and pass through parameters
     PrivateReview privateReview =
         new PrivateReview(
             reviewerName, reviewerEmail, rating, reviewString, followUpEmailRequested);
     privateReview.setActivityId(reviewId);
-
+    // Add to arraylist
     reviewArrayList.add(privateReview);
-
+    // Print message
     MessageCli.REVIEW_ADDED.printMessage(reviewType, reviewId, activityName);
   }
 
   public void addExpertReview(String activityId, String[] options) {
+    // Initalises same fiels as Public review
     boolean check = false;
     String activityName = null;
     String reviewType = "Expert";
@@ -441,7 +449,7 @@ public class OperatorManagementSystem {
       if (startOfCombinedId > 0 && endOfCombinedId > startOfCombinedId) {
         // extract the parts we need
         String fullActivityId = activity.substring(startOfCombinedId, endOfCombinedId);
-
+        // checks they match then extracts the part we need
         if (fullActivityId.equals(activityId)) {
           check = true;
           int indexOfColon = activity.indexOf(":");
@@ -452,31 +460,33 @@ public class OperatorManagementSystem {
         }
       }
     }
-
+    // if check is false then print message
     if (!check) {
       MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
       return;
     }
-
+    
+    // Create an object of type GenerateReviewId
     GenerateReviewId generateReviewId = new GenerateReviewId();
-
+    // call method from GenerateReviewId class to generate a review id
     String reviewId = generateReviewId.generateReviewId(activityId, reviewArrayList);
-
+    // Store the first element at index 0 as reviewerName
+    // and so on for the other parameters
     String reviewerName = options[0];
     int rating = Integer.parseInt(options[1]);
     String reviewString = options[2];
     boolean recommend = options[3].equals("y");
-
+    // Create expertReview of type ExpertReview and pass through parameters
     ExpertReview expertReview = new ExpertReview(reviewerName, rating, reviewString, recommend);
     expertReview.setActivityId(reviewId);
-
+    // Add to arraylist
     reviewArrayList.add(expertReview);
-
+    // Print message
     MessageCli.REVIEW_ADDED.printMessage(reviewType, reviewId, activityName);
   }
 
   public void displayReviews(String activityId) {
-
+    // Set name as nothing
     String activityName = null;
 
     for (String activity : activitiesArrayList) {
@@ -488,7 +498,7 @@ public class OperatorManagementSystem {
       if (startOfCombinedId > 0 && endOfCombinedId > startOfCombinedId) {
         // extract the parts we need
         String fullActivityId = activity.substring(startOfCombinedId, endOfCombinedId);
-
+        // checks they match then extracts the part we need
         if (fullActivityId.equals(activityId)) {
           int indexOfColon = activity.indexOf(":");
           if (indexOfColon > 0) {
@@ -498,28 +508,29 @@ public class OperatorManagementSystem {
         }
       }
     }
-
+    // If name is still nothing exit
     if (activityName == null) {
       return;
     }
 
     ArrayList<Review> matchedReviews = new ArrayList<>();
-
+    // Checks the review is valid by applying conditions
     for (Review review : reviewArrayList) {
       String reviewId = review.getActivityId();
-
+      // ensures it has a reviewId that is valid
       if (reviewId != null && reviewId.startsWith(activityId + "-R")) {
         matchedReviews.add(review);
       }
     }
-
+    // If empty print message
     if (matchedReviews.isEmpty()) {
       System.out.println("There are no reviews for activity '" + activityName + "'.");
       return;
     }
-
+    // Gets size of array which is our review count
     int reviewCount = matchedReviews.size();
-    // REVIEWS_FOUND("There %s %s review%s for activity '%s'."),
+    // If equal to 1 print certain message
+    // otherwise print another message
     if (reviewCount == 1) {
       MessageCli.REVIEWS_FOUND.printMessage("is", "1", "", activityName);
     } else {
@@ -527,14 +538,15 @@ public class OperatorManagementSystem {
     }
 
     for (Review review : matchedReviews) {
-
+      // Checks that review of the for loop is an instance of PublicReview class
       if (review instanceof PublicReview) {
+        // Cast PublicReview onto review
         PublicReview publicReview = (PublicReview) review;
-
+        // Uses boolean to determine what name to show
         String nameToShow = publicReview.isAnonymous() ? "Anonymous" : review.getName();
 
-        // REVIEW_ENTRY_HEADER("  * [%s/%s] %s review (%s) by '%s'")
 
+        // Prints message
         MessageCli.REVIEW_ENTRY_HEADER.printMessage(
             String.valueOf(publicReview.getRating()),
             "5",
@@ -547,8 +559,9 @@ public class OperatorManagementSystem {
           System.out.println("  Endorsed by admin.");
         }
       } else if (review instanceof PrivateReview) {
+        // Cast PrivateReview onto review
         PrivateReview privateReview = (PrivateReview) review;
-
+        // Prints Message
         MessageCli.REVIEW_ENTRY_HEADER.printMessage(
             String.valueOf(privateReview.getRating()),
             "5",
@@ -562,21 +575,23 @@ public class OperatorManagementSystem {
           System.out.println("  Resolved: \"-\"");
         }
       } else if (review instanceof ExpertReview) {
+        // Cast ExpertReview onto review
         ExpertReview expertReview = (ExpertReview) review;
-
+        // Prints message
         MessageCli.REVIEW_ENTRY_HEADER.printMessage(
             String.valueOf(expertReview.getRating()),
             "5",
             "Expert",
             expertReview.getActivityId(),
             expertReview.getName());
-
+        
         System.out.println("  \"" + expertReview.getReviewString() + "\"");
-
+        // Checks if it is recommended by experts
         if (expertReview.getRecommend()) {
           System.out.println("  Recommended by experts.");
         }
 
+        // Checks if there are images and prints accordingly
         if (!expertReview.images.isEmpty()) {
           System.out.print("  Images: [");
           for (int i = 0; i < expertReview.images.size(); i++) {
@@ -589,12 +604,15 @@ public class OperatorManagementSystem {
         }
       }
     }
-  }
+  } 
 
   public void endorseReview(String reviewId) {
     for (Review review : reviewArrayList) {
+      // Ensures the activityid and review Id match
       if (review.getActivityId().equals(reviewId)) {
         if (review instanceof PublicReview) {
+          // Cast then checks if it is endorsed by calling method
+          // then print message
           ((PublicReview) review).endorse();
           MessageCli.REVIEW_ENDORSED.printMessage(reviewId);
         } else {
@@ -603,63 +621,73 @@ public class OperatorManagementSystem {
         return;
       }
     }
+    // Print message
     MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
   }
 
   public void resolveReview(String reviewId, String response) {
+    // no review to resolve yet
     Review reviewToResolve = null;
 
     for (Review review : reviewArrayList) {
+      // Checks it is valid 
+      // then sets the review we want to resolve
       if (review.getActivityId().equals(reviewId)) {
         reviewToResolve = review;
         break;
       }
     }
-
+    // If not found then print message
     if (reviewToResolve == null) {
       MessageCli.REVIEW_NOT_FOUND.printMessage((reviewId));
       return;
     }
-
+    // Checks that review to Resolve is an instance of PrivateReview
+    // otherwise print message
     if (!(reviewToResolve instanceof PrivateReview)) {
       MessageCli.REVIEW_NOT_RESOLVED.printMessage(reviewId);
       return;
     }
-
+    // Cast PrivateReview onto review to resolve
     PrivateReview privateReview = (PrivateReview) reviewToResolve;
     privateReview.setResponse(response);
-
+    // Print message
     MessageCli.REVIEW_RESOLVED.printMessage(reviewId);
   }
 
   public void uploadReviewImage(String reviewId, String imageName) {
+    // Set image to upload as nothing
     Review imageToUpload = null;
 
     for (Review review : reviewArrayList) {
+      // Checks activityId Is valid
+      // then set it as the review we want to upload images for
       if (review.getActivityId().equals(reviewId)) {
         imageToUpload = review;
         break;
       }
     }
-
+    // If no review found then print message
     if (imageToUpload == null) {
       MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
       return;
     }
-
+    // Checks that the review is an instance of ExpertReview 
+    // if not print message
     if (!(imageToUpload instanceof ExpertReview)) {
       MessageCli.REVIEW_IMAGE_NOT_ADDED_NOT_EXPERT.printMessage(reviewId);
       return;
     }
-
+    // Cast ExpertReview onto imageToUpload
     ExpertReview expertReview = (ExpertReview) imageToUpload;
 
     expertReview.addImage(imageName);
-
+    // Print message
     MessageCli.REVIEW_IMAGE_ADDED.printMessage(imageName, reviewId);
   }
 
   public void displayTopActivities() {
+    // Initliase Locations as a string array
     String[] locations = {
       "Auckland | Tāmaki Makaurau",
       "Hamilton | Kirikiriroa",
@@ -670,7 +698,7 @@ public class OperatorManagementSystem {
       "Christchurch | Ōtautahi",
       "Dunedin | Ōtepoti"
     };
-
+    // Loops through everything in locations array
     for (String location : locations) {
       String topActivityName = null;
       double topAverage = -1;
@@ -685,7 +713,7 @@ public class OperatorManagementSystem {
 
         // Find operator ID from activityId (everything before last '-')
         String operatorId = fullActivityId.substring(0, fullActivityId.lastIndexOf("-"));
-
+        // Checks for a match
         Operator matchedOperator = null;
         for (Operator operator : operatorArrayList) {
           if (operator.getId().equals(operatorId)) {
@@ -693,19 +721,21 @@ public class OperatorManagementSystem {
             break;
           }
         }
-
+        // If no match continue
         if (matchedOperator == null) {
           continue;
         }
-
+      
         String operatorLocation = matchedOperator.getLocationFullName();
-
+       
         if (!operatorLocation.equals(location)) {
           continue;
         }
 
         int total = 0;
         int count = 0;
+        // Loops through everything in the array list to check if they can be averaged
+        // add total rating and increases count
         for (Review review : reviewArrayList) {
           if (review.getActivityId().startsWith(fullActivityId)) {
             if (review instanceof PublicReview || review instanceof ExpertReview) {
@@ -714,13 +744,13 @@ public class OperatorManagementSystem {
             }
           }
         }
-
+        // Ensure we can properly average it
         double average = (double) total / count;
-
+        // extracts the values we want
         int start = activity.indexOf("* ") + 2;
         int end = activity.indexOf(": [");
         String activityName = activity.substring(start, end);
-
+        // Checks for which one is top activity
         if (average > topAverage) {
           topAverage = average;
           topActivityName = activityName;
