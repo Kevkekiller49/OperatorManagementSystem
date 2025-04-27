@@ -576,6 +576,17 @@ public class OperatorManagementSystem {
         if (expertReview.getRecommend()) {
           System.out.println("  Recommended by experts.");
         }
+
+        if (!expertReview.images.isEmpty()) {
+          System.out.print("  Images: [");
+          for (int i = 0; i < expertReview.images.size(); i++) {
+            System.out.print(expertReview.images.get(i));
+            if (i != expertReview.images.size() - 1) {
+              System.out.print(",");
+            }
+          }
+          System.out.println("]");
+        }
       }
     }
   }
@@ -627,7 +638,7 @@ public class OperatorManagementSystem {
 
 
     for (Review review : reviewArrayList) {
-      if (review.getReviewId().equals(reviewId)) {
+      if (review.getActivityId().equals(reviewId)) {
         imageToUpload = review;
         break;
       }
@@ -638,6 +649,17 @@ public class OperatorManagementSystem {
       return;
     }
 
+
+    if (!(imageToUpload instanceof ExpertReview)) {
+      MessageCli.REVIEW_IMAGE_NOT_ADDED_NOT_EXPERT.printMessage(reviewId);
+      return;
+    }
+
+    ExpertReview expertReview = (ExpertReview) imageToUpload;
+
+    expertReview.addImage(imageName);
+
+    MessageCli.REVIEW_IMAGE_ADDED.printMessage(imageName, reviewId);
 
   }
 
