@@ -625,17 +625,15 @@ public class OperatorManagementSystem {
       MessageCli.REVIEW_NOT_RESOLVED.printMessage(reviewId);
       return;
     }
-    
+
     PrivateReview privateReview = (PrivateReview) reviewToResolve;
     privateReview.setResponse(response);
-  
-    MessageCli.REVIEW_RESOLVED.printMessage(reviewId);
 
+    MessageCli.REVIEW_RESOLVED.printMessage(reviewId);
   }
 
   public void uploadReviewImage(String reviewId, String imageName) {
     Review imageToUpload = null;
-
 
     for (Review review : reviewArrayList) {
       if (review.getActivityId().equals(reviewId)) {
@@ -643,12 +641,11 @@ public class OperatorManagementSystem {
         break;
       }
     }
-   
+
     if (imageToUpload == null) {
       MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
       return;
     }
-
 
     if (!(imageToUpload instanceof ExpertReview)) {
       MessageCli.REVIEW_IMAGE_NOT_ADDED_NOT_EXPERT.printMessage(reviewId);
@@ -660,12 +657,82 @@ public class OperatorManagementSystem {
     expertReview.addImage(imageName);
 
     MessageCli.REVIEW_IMAGE_ADDED.printMessage(imageName, reviewId);
-
   }
 
   public void displayTopActivities() {
-    for (Types.Location location : Types.Location.values()) {
-      System.out.println("No reviewed activities found in " + location.getFullName() + ".");
+    String[] locations = {
+      "Auckland | Tāmaki Makaurau",
+      "Hamilton | Kirikiriroa",
+      "Tauranga",
+      "Taupo | Taupō-nui-a-Tia",
+      "Wellington | Te Whanganui-a-Tara",
+      "Nelson | Whakatu",
+      "Christchurch | Ōtautahi",
+      "Dunedin | Ōtepoti"
+    };
+
+    for (String location : locations) {
+      String topActivityName = null;
+      double topAverage = -1;
+
+      for (String activity : activitiesArrayList) {
+        // Gets the start of the activity Id string from [ + 1
+        int startOfCombinedId = activity.indexOf("[") + 1;
+        // ends the activity id at / and makes the start of it the field above
+        int endOfCombinedId = activity.indexOf("/", startOfCombinedId);
+        // Combine them
+        String fullActivityId = activity.substring(startOfCombinedId, endOfCombinedId);
+
+        // Find operator ID from activityId (everything before last '-')
+        String operatorId = fullActivityId.substring(0, fullActivityId.lastIndexOf("-"));
+
+        Operator matchedOperator = null;
+        for (Operator operator : operatorArrayList) {
+          if (operator.getId().equals(operatorId)) {
+            matchedOperator = operator;
+            break;
+          }
+        }
+
+        if (matchedOperator == null) {
+          continue;
+        }
+
+        String operatorLocation = matchedOperator.getLocationFullName();
+
+        if (!operatorLocation.equals(location)) {
+          continue;
+        }
+
+        int total = 0;
+        int count = 0;
+        for (Review review : reviewArrayList) {
+          if (review.getActivityId().startsWith(fullActivityId)) {
+            if (review instanceof PublicReview || review instanceof ExpertReview) {
+              total += review.getRating();
+              count++;
+            }
+          }
+        }
+
+        double average = (double) total / count;
+
+        int start = activity.indexOf("* ") + 2;
+        int end = activity.indexOf(": [");
+        String activityName = activity.substring(start, end);
+
+        if (average > topAverage) {
+          topAverage = average;
+          topActivityName = activityName;
+        }
+      }
+      // NO_REVIEWED_ACTIVITIES("No reviewed activities found in %s.")
+      if (topActivityName == null) {
+        MessageCli.NO_REVIEWED_ACTIVITIES.printMessage(location);
+      } else {
+        MessageCli.TOP_ACTIVITY.printMessage(
+            location, topActivityName, String.valueOf(Math.round(topAverage)));
+      }
     }
   }
 }
