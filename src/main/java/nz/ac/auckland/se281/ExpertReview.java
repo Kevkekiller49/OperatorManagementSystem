@@ -3,9 +3,9 @@ package nz.ac.auckland.se281;
 import java.util.ArrayList;
 
 public class ExpertReview extends Review {
-  boolean recommend;
+  private boolean recommend;
   // Creates an array to store images that a strings
-  ArrayList<String> images = new ArrayList<>();
+  protected ArrayList<String> images = new ArrayList<>();
 
   public ExpertReview(String reviewerName, int rating, String reviewString, boolean recommend) {
     // Sets this instance of fields accordingly

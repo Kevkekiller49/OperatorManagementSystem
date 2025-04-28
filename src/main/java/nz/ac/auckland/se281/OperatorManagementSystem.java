@@ -5,9 +5,9 @@ import nz.ac.auckland.se281.Types.ActivityType;
 
 public class OperatorManagementSystem {
 
-  ArrayList<Operator> operatorArrayList = new ArrayList<>();
-  ArrayList<String> activitiesArrayList = new ArrayList<>();
-  ArrayList<Review> reviewArrayList = new ArrayList<>();
+  private ArrayList<Operator> operatorArrayList = new ArrayList<>();
+  private ArrayList<String> activitiesArrayList = new ArrayList<>();
+  private ArrayList<Review> reviewArrayList = new ArrayList<>();
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
@@ -229,15 +229,22 @@ public class OperatorManagementSystem {
       return;
     }
     // Formats all the strings to add to arraylist
-    String activityID = String.format("%03d", activityCount);
-    String combinedID = operatorId + "-" + activityID;
+    String activityIdentification = String.format("%03d", activityCount);
+    String combinedIdentification = operatorId + "-" + activityIdentification;
     String storedActivity =
-        "* " + activityName + ": [" + combinedID + "/" + newType + "] offered by " + operatorName;
+        "* "
+            + activityName
+            + ": ["
+            + combinedIdentification
+            + "/"
+            + newType
+            + "] offered by "
+            + operatorName;
     activitiesArrayList.add(storedActivity);
 
     // Print message
     MessageCli.ACTIVITY_CREATED.printMessage(
-        activityName, combinedID, newType.getName(), operatorName);
+        activityName, combinedIdentification, newType.getName(), operatorName);
   }
 
   public void searchActivities(String keyword) {
