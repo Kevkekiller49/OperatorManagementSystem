@@ -183,6 +183,8 @@ public class OperatorManagementSystem {
   }
 
   public void createActivity(String activityName, String activityType, String operatorId) {
+    activityName = activityName.trim();
+
     // If the activity name is less than 3 letters then print erorr message
     if (activityName.length() < 3) {
       MessageCli.ACTIVITY_NOT_CREATED_INVALID_ACTIVITY_NAME.printMessage(activityName);
