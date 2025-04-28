@@ -7,7 +7,7 @@ public class GenerateReviewId {
   public String generateReviewId(String activityId, ArrayList<Review> reviewArrayList) {
     // Sets review number to 0
     int highestReviewNumber = 0;
-    // Loops through entire array 
+    // Loops through entire array
     // checks if valid then applies condition
     for (Review review : reviewArrayList) {
       if (review.getActivityId().startsWith(activityId)) {

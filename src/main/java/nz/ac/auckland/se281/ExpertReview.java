@@ -12,19 +12,21 @@ public class ExpertReview extends Review {
     super(reviewerName, rating, reviewString);
     this.recommend = recommend;
   }
+
   // Place holder for abstract class
   // ExpertReviews can not be anonymous
   @Override
   public boolean isAnonymous() {
     return false;
   }
+
   // Returns the boolean of recommend
   public boolean getRecommend() {
     return recommend;
   }
+
   // Method that adds images to the arraylist
   public void addImage(String imageName) {
     images.add(imageName);
   }
-  
 }

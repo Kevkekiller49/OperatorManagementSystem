@@ -465,7 +465,7 @@ public class OperatorManagementSystem {
       MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
       return;
     }
-    
+
     // Create an object of type GenerateReviewId
     GenerateReviewId generateReviewId = new GenerateReviewId();
     // call method from GenerateReviewId class to generate a review id
@@ -545,7 +545,6 @@ public class OperatorManagementSystem {
         // Uses boolean to determine what name to show
         String nameToShow = publicReview.isAnonymous() ? "Anonymous" : review.getName();
 
-
         // Prints message
         MessageCli.REVIEW_ENTRY_HEADER.printMessage(
             String.valueOf(publicReview.getRating()),
@@ -584,7 +583,7 @@ public class OperatorManagementSystem {
             "Expert",
             expertReview.getActivityId(),
             expertReview.getName());
-        
+
         System.out.println("  \"" + expertReview.getReviewString() + "\"");
         // Checks if it is recommended by experts
         if (expertReview.getRecommend()) {
@@ -604,7 +603,7 @@ public class OperatorManagementSystem {
         }
       }
     }
-  } 
+  }
 
   public void endorseReview(String reviewId) {
     for (Review review : reviewArrayList) {
@@ -630,7 +629,7 @@ public class OperatorManagementSystem {
     Review reviewToResolve = null;
 
     for (Review review : reviewArrayList) {
-      // Checks it is valid 
+      // Checks it is valid
       // then sets the review we want to resolve
       if (review.getActivityId().equals(reviewId)) {
         reviewToResolve = review;
@@ -672,7 +671,7 @@ public class OperatorManagementSystem {
       MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
       return;
     }
-    // Checks that the review is an instance of ExpertReview 
+    // Checks that the review is an instance of ExpertReview
     // if not print message
     if (!(imageToUpload instanceof ExpertReview)) {
       MessageCli.REVIEW_IMAGE_NOT_ADDED_NOT_EXPERT.printMessage(reviewId);
@@ -725,9 +724,9 @@ public class OperatorManagementSystem {
         if (matchedOperator == null) {
           continue;
         }
-      
+
         String operatorLocation = matchedOperator.getLocationFullName();
-       
+
         if (!operatorLocation.equals(location)) {
           continue;
         }
